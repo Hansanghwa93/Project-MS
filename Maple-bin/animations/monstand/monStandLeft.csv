@@ -1,0 +1,11 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+monStandLeft,1,10,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FLIPX,FLIPY
+graphics/Monster/charStand1.png,0,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,157,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,314,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,471,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,628,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,785,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,942,0,157,133,47.5,46,0,0
+graphics/Monster/charStand1.png,1099,0,157,133,47.5,46,0,0

@@ -1,8 +1,12 @@
 #pragma once
 #include "../Animator/Animator.h"
 #include "../Framework/Utils.h"
+#include "Object.h"
+#include "SpriteObj.h"
 
-class Monster
+class Scene;
+class Floor;
+class Monster : public SpriteObj
 {
 public:
 	enum class States
@@ -13,7 +17,6 @@ public:
 		Stand,
 	};
 protected:
-	Sprite sprite;
 	Animator animator;
 
 	States currState;
@@ -22,17 +25,20 @@ protected:
 	Vector2f direction;
 	Vector2f lastDirection;
 	Vector2f velocity;
+
+	SpriteObj* background;
+	vector<Floor*> floor;
 public:
-	Monster() : currState(States::None), speed(200.f), direction(1.f, 0.f), lastDirection(1.f, 0.f) {}
+	Monster() : currState(States::None), speed(200.f), direction(1.f, 0.f), lastDirection(1.f, 0.f), velocity(0.f, -1000.f) {}
 	void Init();
 
 	void SetState(States newState);
+	void SetBackgound(SpriteObj* bk);
 
-	void UpdateInput(Event ev);
 	void Update(float dt);
 	void Draw(RenderWindow& window);
 
-	void OnCompleteJump();
+	void SetFloor(vector<Floor*> floor);
 
 	void UpdateStand(float dt);
 	void UpdateRun(float dt);

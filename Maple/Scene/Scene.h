@@ -9,7 +9,7 @@ using namespace std;
 enum class Scenes
 {
 	Play,
-	Dev2,
+	Dev,
 };
 
 class UiMgr;

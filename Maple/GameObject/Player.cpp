@@ -26,11 +26,14 @@ void Player::Init()
 	animator.AddClip(*RESOURCE_MGR->GetAnimationClip("JumpLeft"));
 	animator.AddClip(*RESOURCE_MGR->GetAnimationClip("JumpRight"));
 
+	animator.AddClip(*RESOURCE_MGR->GetAnimationClip("AttackSideLeft"));
+	animator.AddClip(*RESOURCE_MGR->GetAnimationClip("AttackSideRight"));
+
 	{
 		AnimationEvent ev;
-		ev.clipId = "AttackBottomLeft";
-		ev.frame = 6;
-		ev.onEvent = bind(&Player::OnCompleteJump, this);
+		ev.clipId = "Attack";
+		ev.frame = 1;
+		ev.onEvent = bind(&Player::OnCompleteAttack, this);
 		animator.AddEvent(ev);
 	}
 
@@ -56,9 +59,13 @@ void Player::SetState(States newState)
 		}
 		break;
 	case Player::States::Attack:
-		//animator.Play("Attack");
+		animator.Play((lastDirection.x > 0.f) ? "AttackSideRight" : "AttackSideLeft");
+		break;
 	case Player::States::Jump:
-		//animator.Play((lastDirection.x > 0.f) ? "JumpRight" : "JumpLeft");
+		animator.Play((lastDirection.x > 0.f) ? "JumpRight" : "JumpLeft");
+		break;
+	case Player::States::DoubleJump:
+		animator.Play((lastDirection.x > 0.f) ? "JumpRight" : "JumpLeft");
 		break;
 	}
 	height = sprite.getGlobalBounds().height;
@@ -73,19 +80,35 @@ void Player::UpdateInput()
 {
 	if (InputMgr::GetKeyDown(Keyboard::Space))
 	{
-		SetState(States::Jump);
-		velocity = Vector2f(0.f, -1000.f);
-		gravity = Vector2f(0.f, 3000.f);
+		if (keypresscnt < 2)
+		{
+			SetState(States::DoubleJump);
+			velocity = Vector2f(0.f, -1000.f);
+			gravity = Vector2f(0.f, 3000.f);
+		}
 	}
 	else if (InputMgr::GetKey(Keyboard::Space))
 	{
 		SetState(States::Jump);
+	}
+	else if (InputMgr::GetKeyUp(Keyboard::Space))
+	{
+		++keypresscnt;
+	}	
+	
+	if (InputMgr::GetKeyDown(Keyboard::LControl))
+	{
+		SetState(States::Attack);
 	}
 }
 
 void Player::Update(float dt)
 {
 	UpdateInput();
+
+	
+
+
 	if (Keyboard::isKeyPressed(Keyboard::Escape))
 		exit(-1);
 	direction.x = 0.f;
@@ -97,8 +120,7 @@ void Player::Update(float dt)
 		//velocity = Utils::Normalize(velocity) * speed;
 	}
 
-
-	Translate(direction*dt*speed);
+	Translate(direction * dt * speed);
 
 	switch (currState)
 	{
@@ -113,6 +135,9 @@ void Player::Update(float dt)
 		break;
 	case Player::States::Jump:
  		UpdateJump(dt);
+		break;
+	case Player::States::DoubleJump:
+		UpdateJump(dt);
 		break;
 	}
 	animator.Update(dt);
@@ -135,7 +160,7 @@ void Player::Draw(RenderWindow& window)
 	window.draw(sprite);
 }
 
-void Player::OnCompleteJump()
+void Player::OnCompleteAttack()
 {
 	SetState(States::Stand);
 }
@@ -146,7 +171,8 @@ void Player::SetFloor(vector<Floor*> floor)
 }
 
 void Player::UpdateStand(float dt)
-{
+{	
+	UpdateDown(dt);
 	if (!EqualFloat(direction.x, 0.f))
 	{
 		SetState(States::Run);
@@ -156,6 +182,7 @@ void Player::UpdateStand(float dt)
 
 void Player::UpdateRun(float dt)
 {
+	UpdateDown(dt);
 	if (EqualFloat(direction.x, 0.f))
 	{
 		SetState(States::Stand);
@@ -169,7 +196,19 @@ void Player::UpdateRun(float dt)
 
 void Player::UpdateAttack(float dt)
 {
-
+	if (2 == animator.GetCurrentFrame())
+	{
+		SetState(States::Stand);
+	}
+	//if (!EqualFloat(direction.x, 0.f))
+	//{
+	//	SetState(States::Stand);
+	//	return;
+	//}
+	//if (EqualFloat(direction.x, lastDirection.x))
+	//{
+	//	animator.Play((direction.x > 0.f) ? "AttackSideRight" : "AttackSideLeft");
+	//}
 }
 
 void Player::UpdateJump(float dt)
@@ -185,6 +224,19 @@ void Player::UpdateJump(float dt)
 			SetState(States::Run);
 			velocity = Vector2f(0.f, -1000.f);
 			gravity = Vector2f(0.f, 3000.f);
+			keypresscnt = 0;
+		}
+	}
+}
+
+void Player::UpdateDown(float dt)
+{
+	Translate(Vector2f{ 0,1 } *dt * 500.f);
+	if (IsBottomHit())
+	{
+		if (abs(GetGlobalBounds().top + GetGlobalBounds().height - nowfloor->GetHitBounds().top) < 10)
+		{
+			Translate(Vector2f{ 0,-1 }*dt * 500.f);
 		}
 	}
 }
@@ -197,12 +249,12 @@ bool Player::EqualFloat(float a, float b)
 bool Player::IsBottomHit()
 {
 	for (auto& botm : floor)
-	{  
+	{
 		for(int i = 0; i < 9; ++i)
 		{
 			if (GetGlobalBounds().intersects(floor[i]->GetHitBounds()))
 			{
-				cout << floor[i]->GetHitBounds().top << endl;
+				//cout << floor[i]->GetHitBounds().top << endl;
 
 				nowfloor = floor[i];
 				return true;

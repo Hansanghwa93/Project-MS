@@ -1,0 +1,5 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+AttackSideRight,0,10,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FLIPX,FLIPY
+graphics/Charactor/charAttack1.png,0,0,169,92,84.5,46,1,0
+graphics/Charactor/charAttack1.png,169,0,169,92,84.5,46,1,0

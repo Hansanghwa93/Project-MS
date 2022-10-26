@@ -19,7 +19,7 @@ void PlayScene::Init()
 	Release();
 
 	background = new SpriteObj();
-	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map1.png"));
+	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/Map/Map1.png"));
 	objList.push_back(background);
 
 	FloatRect boxs[9] = { {0,840,2770,50},{188,635,235,50 },{510,547,300,50},{915,459,300,50},{1320,370,200,50},{1640,465,300,50},{2040,550,300,50},{2450,640,200,50},{1100,641,650,50} };
