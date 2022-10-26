@@ -1,0 +1,7 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+RunSideRight,1,10,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FLIPX,FLIPY
+graphics/walk1.png,0,0,125,92,62.5,46,1,0
+graphics/walk1.png,125,0,125,92,62.5,46,1,0
+graphics/walk1.png,250,0,125,92,62.5,46,1,0
+graphics/walk1.png,375,0,125,92,62.5,46,1,0

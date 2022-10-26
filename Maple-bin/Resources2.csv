@@ -1,0 +1,10 @@
+id,type (0: Texture 1: Font 2: Sound 3: Animation Clip)
+graphics/charStand1.png,0
+graphics/walk1.png,0
+graphics/Map1.png,0
+animations/stand/StandLeft.csv,3
+animations/stand/StandRight.csv,3
+animations/run/RunSideLeft.csv,3
+animations/run/RunSideRight.csv,3
+animations/Jump/JumpLeft.csv,3
+animations/Jump/JumpRight.csv,3

@@ -1,0 +1,78 @@
+#include "SpriteObj.h"
+
+SpriteObj::SpriteObj()
+{
+}
+
+SpriteObj::~SpriteObj()
+{
+}
+
+void SpriteObj::Draw(RenderWindow& window)
+{
+	Object::Draw(window);
+	window.draw(sprite);
+}
+
+void SpriteObj::SetTexture(const Texture& tex)
+{
+	sprite.setTexture(tex, true);
+}
+
+void SpriteObj::SetOrigin(Origins origin)
+{
+	Utils::SetOrigin(sprite, origin);
+}
+
+void SpriteObj::SetColor(Color color)
+{
+	sprite.setColor(color);
+}
+Vector2f SpriteObj::GetSize() const
+{
+	FloatRect rect = sprite.getLocalBounds();
+
+	return Vector2f(rect.width, rect.height);
+}
+
+void SpriteObj::SetPos(const Vector2f& pos)
+{
+	sprite.setPosition(position);
+	Object::SetPos(pos);
+}
+
+void SpriteObj::SetTextureRect(const IntRect& rect)
+{
+	sprite.setTextureRect(rect);
+}
+void SpriteObj::SetSize(Vector2f size)
+{
+	auto localSize = sprite.getLocalBounds();
+	sprite.setScale({ size.x / localSize.width, size.y / localSize.height });
+}
+void SpriteObj::SetScale(Vector2f scale)
+{
+	sprite.setScale(scale);
+}
+void SpriteObj::Translate(const Vector2f& delta)
+{
+	SetPos(position + delta);
+}
+const IntRect& SpriteObj::GetTextureRect() const
+{
+	return sprite.getTextureRect();
+}
+
+FloatRect SpriteObj::GetGlobalBounds() const
+{
+	return sprite.getGlobalBounds();
+}
+FloatRect SpriteObj::GetLocalBounds() const
+{
+	return sprite.getLocalBounds();
+}
+FloatRect SpriteObj::GetHitBounds() const
+{
+	return hitbox.getGlobalBounds();
+}
+

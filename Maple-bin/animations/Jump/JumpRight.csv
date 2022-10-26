@@ -1,0 +1,4 @@
+ID,LOOPTYPE (0: Single 1: Move),FPS,,,,,,
+JumpRight,1,10,,,,,,
+TEXTURE ID,L,T,W,H,X,Y,FLIPX,FLIPY
+graphics/charJump.png,0,0,84,114,42,57,1,0
